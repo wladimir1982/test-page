@@ -1,0 +1,114 @@
+<div class="container">
+  <div class="row wrap">
+    <aside class="sidebar col s12 m5 l3">
+      <form [formGroup]="form" class="sidebar-container">
+        <div class="city">
+          <h4 class="title">City</h4>
+          <div class="input-field">
+            <select
+              (change)="change($event.target.value)"
+              formControlName="city"
+              class="browser-default">
+              <option value="" disabled selected>Choose your city</option>
+              <option *ngFor="let city of cities;" [value]="city.id">{{city.name}}</option>
+            </select>
+          </div>
+        </div>
+        <div *ngIf="!loading; else loader">
+          <div class="categories">
+            <h4 class="title">Categories</h4>
+            <ul>
+              <li *ngFor="let category of categories">
+                <p>
+                  <label>
+                    <!--(click)="filterCategories($event, $event.target.value)"-->
+                    <input
+                      (click)="filterCategories($event, $event.target.value)"
+                      [value]="category.id"
+                      formControlName="category"
+                      type="checkbox"
+                      class="filled-in"/>
+                    <span>{{category.name}}</span>
+                  </label>
+                </p>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <ng-template #loader>
+          <app-loader></app-loader>
+        </ng-template>
+        <div class="price">
+          <h4 class="title">Price</h4>
+          <div class="dx-fieldset">
+            <div class="dx-field">
+              <dx-range-slider #rangeSlider
+                               [min]="0"
+                               [max]="250"
+                               [start]="0"
+                               [end]="250"
+              ></dx-range-slider>
+            </div>
+            <div class="box-number">
+              <div class="dx-field filed">
+                <div class="dx-field-value">
+                  <div class="dol">$</div>
+                  <dx-number-box
+                    [min]="0"
+                    [max]="250"
+                    [showSpinButtons]="true"
+                    [(value)]="rangeSlider.start"
+                  ></dx-number-box>
+                </div>
+              </div>
+              <div class="letter">-</div>
+              <div class="dx-field filed">
+                <div class="dx-field-value">
+                  <div class="dol">$</div>
+                  <dx-number-box
+                    [min]="0"
+                    [max]="250"
+                    [showSpinButtons]="true"
+                    [(value)]="rangeSlider.end"
+                  ></dx-number-box>
+                </div>
+              </div>
+              <a
+                (click)="filterPrice()"
+                class="waves-effect waves-light btn"
+              >
+                filter
+              </a>
+            </div>
+          </div>
+        </div>
+      </form>
+    </aside>
+    <main class="table-of-contents col s12 m7 l9">
+      <div class="content">
+        <div class="row">
+          <div *ngIf="!loading; else loader">
+            <div class="col s12 m12 l4" *ngFor="let f of filtered">
+              <div class="card">
+                <div class="card-image">
+                  <img src="../../assets/img/woman-hand-desk-office_copy_2.png">
+                  <span class="card-title">{{f.city}}</span>
+                </div>
+                <div class="card-content">
+                  <p>{{f.name}}</p>
+                </div>
+                <div class="card-action">
+                  <div class="value-category">{{f.category}}</div>
+                  <div class="value-price">${{f.price}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ng-template #loader>
+          <app-loader></app-loader>
+        </ng-template>
+      </div>
+    </main>
+  </div>
+</div>
